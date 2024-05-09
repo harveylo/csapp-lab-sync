@@ -293,7 +293,32 @@ int logicalNeg(int x) {
  *  Max ops: 90
  *  Rating: 4
  */
-int howManyBits(int x) { return 0; }
+int howManyBits(int x) {
+    // Positive part, if x < 0, then -x-1, else equals to x;
+
+    int bits16,bits8,bits4,bits2,bits1,bits0;
+
+    x = x^(x>>31);
+
+    bits16 = !!(x>>16)<<4;
+    x >>= bits16;
+
+    bits8 = !!(x>>8)<<3;
+    x>>=bits8;
+
+    bits4 = !!(x>>4)<<2;
+    x>>=bits4;
+
+    bits2 = !!(x>>2)<<1;
+    x>>=bits2;
+
+    bits1 = !!(x>>1);
+    x>>=bits1;
+
+    bits0 = x;
+
+    return bits16+bits8+bits4+bits2+bits1+bits0+1;
+}
 // float
 /*
  * floatScale2 - Return bit-level equivalent of expression 2*f for
