@@ -142,17 +142,18 @@ NOTES:
  *   Max ops: 14
  *   Rating: 1
  */
-int bitXor(int x, int y) {
+int bitXor(int x, int y)
+{
     /**
      * @brief x xor y = (x and not y) or (not x and y)
      * = (nx or ny) and (x or y)
      * = ~(nx and ny) and ~(x and y)
      */
-  int nx = ~x;
-  int ny = ~y;
-  int xandy = x & y;
-  int nxandny = nx & ny;
-  return (~xandy) & (~nxandny);
+    int nx = ~x;
+    int ny = ~y;
+    int xandy = x & y;
+    int nxandny = nx & ny;
+    return (~xandy) & (~nxandny);
 }
 /*
  * tmin - return minimum two's complement integer
@@ -160,11 +161,12 @@ int bitXor(int x, int y) {
  *   Max ops: 4
  *   Rating: 1
  */
-int tmin(void) {
+int tmin(void)
+{
     /**
      * @brief 1000 0000 0000 0000 0000 0000 0000 0000
      */
-  return 1 << 31;
+    return 1 << 31;
 }
 // 2
 /*
@@ -174,12 +176,13 @@ int tmin(void) {
  *   Max ops: 10
  *   Rating: 1
  */
-int isTmax(int x) { 
+int isTmax(int x)
+{
     /**
      * @brief if x is tmax, x xor tmax = 0
-     * 
+     *
      */
-     return (!(~x^(x+1))) & (!(!(x+1)));
+    return (!(~x ^ (x + 1))) & (!(!(x + 1)));
 }
 /*
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
@@ -189,12 +192,13 @@ int isTmax(int x) {
  *   Max ops: 12
  *   Rating: 2
  */
-int allOddBits(int x) {
+int allOddBits(int x)
+{
     /**
      * @brief 1010 1010 1010 1010 1010 1010 1010 1010
      */
-    int mask = (0xAA<<24) + (0xAA<<16) + (0xAA<<8) + 0xAA;
-    return !((x&mask)^mask);
+    int mask = (0xAA << 24) + (0xAA << 16) + (0xAA << 8) + 0xAA;
+    return !((x & mask) ^ mask);
 }
 /*
  * negate - return -x
@@ -203,8 +207,9 @@ int allOddBits(int x) {
  *   Max ops: 5
  *   Rating: 2
  */
-int negate(int x) {
-    return (~x)+1;
+int negate(int x)
+{
+    return (~x) + 1;
 }
 // 3
 /*
@@ -215,12 +220,18 @@ int negate(int x) {
  *   Max ops: 15
  *   Rating: 3
  */
-int isAsciiDigit(int x) {
-    int negate_upper_bound = (~0x39)+1;
-    int negate_lower_bound = (~0x30)+1;
+int isAsciiDigit(int x)
+{
+    /**
+     * To judge whether a number is within a range, minus that number with the upper bound and the lower bound,
+     * and judge the two result's sign
+     * 
+    */
+    int negate_upper_bound = (~0x39) + 1;
+    int negate_lower_bound = (~0x30) + 1;
     int upper_bound_plus = negate_upper_bound + x;
     int lower_bound_plus = negate_lower_bound + x;
-    return (((upper_bound_plus>>31)|(!upper_bound_plus))&1)&(~((lower_bound_plus>>31)&1));
+    return (((upper_bound_plus >> 31) | (!upper_bound_plus)) & 1) & (~((lower_bound_plus >> 31) & 1));
 }
 /*
  * conditional - same as x ? y : z
@@ -229,7 +240,13 @@ int isAsciiDigit(int x) {
  *   Max ops: 16
  *   Rating: 3
  */
-int conditional(int x, int y, int z) { return 2; }
+int conditional(int x, int y, int z)
+{
+    /**
+     * Utilize the arithmatic right shift, get the result and get the mask of 0xffffffff if the x is not zero or otherwise 0
+    */
+    return ((((!(!x))<<31)>>31)&y) + ((((!x)<<31)>>31)&z);
+}
 /*
  * isLessOrEqual - if x <= y  then return 1, else return 0
  *   Example: isLessOrEqual(4,5) = 1.
@@ -237,7 +254,17 @@ int conditional(int x, int y, int z) { return 2; }
  *   Max ops: 24
  *   Rating: 3
  */
-int isLessOrEqual(int x, int y) { return 2; }
+int isLessOrEqual(int x, int y) {
+    /**
+     * First, if the x is positive and the y is negative, the result should be false
+     * then calculate the x-y, judge whether the sum is 0 or negtive, also need to 
+     * specifically handle the situation that x is negative and y is positive in case
+     * the overflow
+    */
+    int negy = ~y+1;
+    int sum = x + negy;
+    return !((((y>>31)&1)&!((x>>31)&1))) & ((!sum) | ((sum>>31)&1) | (((x>>31)&1)&!((y>>31)&1)));
+}
 // 4
 /*
  * logicalNeg - implement the ! operator, using all of
@@ -247,7 +274,13 @@ int isLessOrEqual(int x, int y) { return 2; }
  *   Max ops: 12
  *   Rating: 4
  */
-int logicalNeg(int x) { return 2; }
+int logicalNeg(int x) {
+    /**
+     * if a number is not zero, the sign digit of (x | -x) must be 1
+    */
+    int sign = ((x>>31) | (((~x)+1)>>31))&1;
+    return sign^1;
+}
 /* howManyBits - return the minimum number of bits required to represent x in
  *             two's complement
  *  Examples: howManyBits(12) = 5
