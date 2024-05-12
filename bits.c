@@ -351,7 +351,23 @@ unsigned floatScale2(unsigned uf) {
  *   Max ops: 30
  *   Rating: 4
  */
-int floatFloat2Int(unsigned uf) { return 2; }
+int floatFloat2Int(unsigned uf) {
+    unsigned sign = ((uf>>31)&1);
+    int exp = (uf>>23)&0xff;
+    unsigned m = (uf&0x7fffff);
+    unsigned f = m|(1<<23);
+    if(!(exp|m)) return 0;
+    if(exp==0xff) return 0x80000000u;
+    exp = exp-127;
+    if(exp<0) return 0;
+    // if uf is positive, the maximum exp can only be 30
+    // however if uf is negative and m is zero, the exp can be 31, 
+    // it is then the minimum value of integer
+    if(exp>30+(sign&!m)) return 0x80000000u;
+    if(exp>23) f = f<<(exp-23);
+    if(exp<=23) f = f>>(23-exp);
+    return sign?(~f+1u):f;
+}
 /*
  * floatPower2 - Return bit-level equivalent of the expression 2.0^x
  *   (2.0 raised to the power x) for any 32-bit integer x.
