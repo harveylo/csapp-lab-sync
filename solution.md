@@ -29,3 +29,16 @@ more numbers can come after the second number, but they does not affect the resu
 
 # Phase 4：
 2 numbers, 7 and 0.
+
+# Phase 5:
+A string of 6 characters, each character's low 4 bits will be used as an index,
+accessing the string at addres 0x4024bc, whoes content is "maduiersnfotvbylSo you think you can stop the bomb with ctrl-c, do you?", composing another string.
+
+Then the composed string will be compared with "flyers", if the two strings are the same, this phase is defused.
+
+Thus a possible solution is `9onefg`
+
+# Phase 6:
+Six numbers.
+The first number must be less than or equal to 6.
+All the rest 5 numbers can not be as the same as the first number.
