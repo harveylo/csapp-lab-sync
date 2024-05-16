@@ -13,7 +13,7 @@ Enter six numbers, where the first number must be 1, and each subsequent number 
 
 # Phase 3:
 
-2 numbers, the first number must be a natural number less than 8.
+2 or more numbers, the first number must be a natural number less than 8.
 
 The second number should be a specific number depending on the first number entered:
 - 207(0xcf), if the first number is 0.
@@ -24,3 +24,8 @@ The second number should be a specific number depending on the first number ente
 - 206(0xce), if the first number is 5.
 - 682(0x2aa), if the first number is 6.
 - 327(0x147), if the first number is 7.
+
+more numbers can come after the second numbers, but they does not effect the result.
+
+# Phase 4：
+2 numbers, 7 and 0.
