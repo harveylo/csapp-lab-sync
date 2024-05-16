@@ -25,7 +25,7 @@ The second number should be a specific number depending on the first number ente
 - 682(0x2aa), if the first number is 6.
 - 327(0x147), if the first number is 7.
 
-more numbers can come after the second numbers, but they does not effect the result.
+more numbers can come after the second number, but they does not affect the result.
 
 # Phase 4：
 2 numbers, 7 and 0.
