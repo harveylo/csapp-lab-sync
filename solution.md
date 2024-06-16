@@ -40,5 +40,48 @@ Thus a possible solution is `9onefg`
 
 # Phase 6:
 Six numbers.
-The first number must be less than or equal to 6.
-All the rest 5 numbers can not be as the same as the first number.
+Every number must be in the range of 1 to 6, and no number can be repeated.
+In the memory there is a node list, with the value of each being like this:
+0x14c -> 0xa8 -> 0x39c -> 0x2b3 -> 0x1dd -> 0x1bb
+The input numbers will be used as the index to access the node list in order, but each number will not be used as an index directly, it will be used to subtract 7 from first.
+The program will check whether the rearranged node list is in the descending order, if it is, this phase is defused.
+Thus, the solution should be:
+4 3 2 1 6 5
+Which will be interpreted as:
+3 4 5 6 1 2
+
+# Secret Phase:
+When defuse the phase 4, append the string "DrEvil" after the number 0, then the secret phase will be entered after the phase 6.
+
+This phase requires a number as input.
+
+There is a tree structure in the memory location 0x6030f0:
+```
+                                 36
+                                /   \
+                               /     \
+                              8       50
+                             / \      / \
+                            /   \    /   \
+                           6    22  45    107
+                          / \  / \  / \    /  \
+                         1  7 20 35 40 47  99 233
+
+```         
+The secret phase will call the fun7 to traverse the tree with a target value.
+The target value is your input number. It's logic is like:
+```c
+int fun7(struct treeNode* p, int v)
+{
+    if (p == NULL)
+        return -1;
+    else if (v < p->data)
+        return 2 * fun7(p->leftChild, v);
+    else if (v == p->data)
+        return 0;
+    else 
+        return 2 * fun7(p->rightChild, v) + 1;
+}
+```
+
+Thus the solution is 22.
