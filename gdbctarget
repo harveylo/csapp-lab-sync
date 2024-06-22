@@ -1,0 +1,1 @@
+gdb --args env LD_PRELOAD=./printf.so ./ctarget-origin -q

@@ -3,6 +3,8 @@ This file contains materials for one instance of the attacklab.
 Files:
 
     ctarget
+CAUTION: The ctarget file is too old to run on some latest linux distribute.
+Check this blog for detailed reason and solution: https://blog.rijuyuezhu.top/posts/db646f34/
 
 Linux binary with code-injection vulnerability.  To be used for phases
 1-3 of the assignment.
